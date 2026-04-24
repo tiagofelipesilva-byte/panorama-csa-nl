@@ -1,0 +1,2615 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Panorama Estratégico · CSA Nova Lima · 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;0,9..144,700;0,9..144,900;1,9..144,400&family=JetBrains+Mono:wght@400;500&family=Inter+Tight:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css">
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
+<style>
+:root {
+  --ink: #0f100e;
+  --paper: #f3efe6;
+  --cream: #e8e2d4;
+  --bronze: #a87f4a;
+  --bronze-light: #c79e68;
+  --burgundy: #6b1f24;
+  --moss: #3d4a2a;
+  --accent: #d4a574;
+  --muted: #7a7466;
+  --line: #2a2a26;
+  --sis: #d32f2f;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: 'Inter Tight', sans-serif;
+  font-weight: 400;
+  line-height: 1.5;
+  overflow-x: hidden;
+}
+
+.grain {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.035;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+nav.top {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 48px;
+  background: rgba(15, 16, 14, 0.92);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(212, 165, 116, 0.15);
+}
+
+nav.top .brand {
+  font-family: 'Fraunces', serif;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--paper);
+  letter-spacing: -0.01em;
+}
+
+nav.top .brand span {
+  color: var(--accent);
+  font-style: italic;
+  font-weight: 300;
+}
+
+nav.top ul {
+  display: flex;
+  gap: 32px;
+  list-style: none;
+}
+
+nav.top a {
+  color: var(--cream);
+  text-decoration: none;
+  font-size: 12px;
+  font-family: 'JetBrains Mono', monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  opacity: 0.7;
+  transition: opacity 0.2s, color 0.2s;
+}
+
+nav.top a:hover { opacity: 1; color: var(--accent); }
+
+/* HERO */
+.hero {
+  min-height: 100vh;
+  background: var(--ink);
+  color: var(--paper);
+  padding: 140px 48px 80px;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -200px;
+  right: -200px;
+  width: 700px;
+  height: 700px;
+  background: radial-gradient(circle, rgba(212, 165, 116, 0.08) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.hero::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--bronze), transparent);
+}
+
+.hero-meta {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--accent);
+  display: flex;
+  gap: 24px;
+  align-items: center;
+  opacity: 0;
+  animation: slideUp 0.8s 0.1s forwards;
+}
+
+.hero-meta .dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+  display: inline-block;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+.hero-title {
+  font-family: 'Fraunces', serif;
+  font-size: clamp(56px, 9vw, 136px);
+  font-weight: 300;
+  line-height: 0.95;
+  letter-spacing: -0.04em;
+  margin-top: 40px;
+  max-width: 1400px;
+  opacity: 0;
+  animation: slideUp 1s 0.3s forwards;
+}
+
+.hero-title em {
+  font-style: italic;
+  color: var(--accent);
+  font-weight: 400;
+}
+
+.hero-title .ampersand {
+  font-style: italic;
+  color: var(--bronze);
+  font-weight: 300;
+}
+
+.hero-sub {
+  font-family: 'Fraunces', serif;
+  font-size: 22px;
+  font-weight: 300;
+  color: var(--cream);
+  max-width: 680px;
+  margin-top: 40px;
+  line-height: 1.5;
+  opacity: 0;
+  animation: slideUp 1s 0.6s forwards;
+}
+
+.hero-sub strong {
+  color: var(--accent);
+  font-weight: 500;
+}
+
+.hero-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-top: 80px;
+  padding-top: 32px;
+  border-top: 1px solid rgba(212, 165, 116, 0.2);
+  opacity: 0;
+  animation: slideUp 1s 0.9s forwards;
+}
+
+.hero-stats {
+  display: flex;
+  gap: 64px;
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+}
+
+.stat-num {
+  font-family: 'Fraunces', serif;
+  font-size: 48px;
+  font-weight: 300;
+  color: var(--paper);
+  line-height: 1;
+  letter-spacing: -0.03em;
+}
+
+.stat-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--muted);
+  margin-top: 10px;
+  max-width: 180px;
+  line-height: 1.4;
+}
+
+.scroll-hint {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--muted);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.scroll-hint::after {
+  content: '↓';
+  font-size: 16px;
+  animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(4px); }
+}
+
+@keyframes slideUp {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+  to { opacity: 1; }
+}
+
+/* SECTION LAYOUT */
+section.block {
+  padding: 120px 48px;
+  border-bottom: 1px solid var(--line);
+  position: relative;
+}
+
+section.dark {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+section.burgundy {
+  background: var(--burgundy);
+  color: var(--paper);
+}
+
+.section-header {
+  display: grid;
+  grid-template-columns: 180px 1fr;
+  gap: 48px;
+  max-width: 1400px;
+  margin: 0 auto 72px;
+  align-items: start;
+}
+
+.section-num {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--bronze);
+  padding-top: 14px;
+  border-top: 1px solid var(--bronze);
+  display: inline-block;
+  width: fit-content;
+}
+
+section.dark .section-num, section.burgundy .section-num {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+.section-title {
+  font-family: 'Fraunces', serif;
+  font-size: clamp(40px, 5.5vw, 80px);
+  font-weight: 300;
+  line-height: 0.98;
+  letter-spacing: -0.03em;
+}
+
+.section-title em {
+  font-style: italic;
+  color: var(--bronze);
+}
+
+section.dark .section-title em, section.burgundy .section-title em {
+  color: var(--accent);
+}
+
+.section-lede {
+  font-family: 'Fraunces', serif;
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 1.5;
+  margin-top: 28px;
+  max-width: 760px;
+  color: var(--muted);
+}
+
+section.dark .section-lede, section.burgundy .section-lede {
+  color: var(--cream);
+}
+
+/* MAPA */
+.map-wrapper {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 420px;
+  gap: 32px;
+}
+
+.map-side { display: flex; flex-direction: column; gap: 16px; }
+
+.map-controls {
+  padding: 18px 22px;
+  border: 1px solid rgba(212, 165, 116, 0.25);
+  background: rgba(212, 165, 116, 0.03);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  align-items: center;
+}
+
+.mc-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--muted);
+  width: 100%;
+}
+
+.mc-buttons { display: flex; gap: 8px; }
+
+.mc-btn {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 8px 16px;
+  background: transparent;
+  border: 1px solid var(--muted);
+  color: var(--cream);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.mc-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+.mc-btn.active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--ink);
+}
+
+.mc-radius {
+  font-family: 'Fraunces', serif;
+  font-size: 13px;
+  color: var(--cream);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+}
+
+.rad {
+  display: inline-block;
+  width: 14px; height: 14px;
+  border-radius: 50%;
+  border: 2px solid var(--accent);
+  background: transparent;
+}
+
+.rad.r2 { border-color: var(--burgundy); border-width: 3px; }
+.rad.r5 { border-color: var(--bronze); }
+.rad.r10 { border-color: var(--moss); opacity: 0.7; }
+
+#map {
+  height: 620px;
+  border: 1px solid var(--line);
+  background: var(--cream);
+}
+
+.leaflet-container { font-family: 'Inter Tight', sans-serif !important; }
+
+.competitors-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-height: 620px;
+  overflow-y: auto;
+  padding-right: 12px;
+}
+
+.competitors-panel::-webkit-scrollbar { width: 4px; }
+.competitors-panel::-webkit-scrollbar-track { background: transparent; }
+.competitors-panel::-webkit-scrollbar-thumb { background: var(--bronze); }
+
+.comp-card {
+  padding: 18px 20px;
+  border: 1px solid var(--line);
+  background: var(--paper);
+  transition: all 0.3s;
+  cursor: pointer;
+  position: relative;
+}
+
+.comp-card:hover {
+  background: var(--cream);
+  border-color: var(--bronze);
+  transform: translateX(-4px);
+}
+
+.comp-card.threat-high::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 3px;
+  background: var(--burgundy);
+}
+
+.comp-card.threat-med::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 3px;
+  background: var(--bronze);
+}
+
+.comp-card.threat-low::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 3px;
+  background: var(--moss);
+}
+
+.comp-card.threat-contra::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 3px;
+  background: var(--bronze-light);
+  opacity: 0.7;
+}
+
+.panel-hdr {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--accent);
+  padding: 10px 0 6px;
+  border-bottom: 1px solid rgba(212, 165, 116, 0.2);
+  margin-top: 8px;
+}
+
+.panel-hdr:first-child { margin-top: 0; }
+
+.comp-card h4 {
+  font-family: 'Fraunces', serif;
+  font-size: 19px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  margin-bottom: 4px;
+}
+
+.comp-card .loc {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+  margin-bottom: 10px;
+}
+
+.comp-card .desc {
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--ink);
+}
+
+.comp-card .tag {
+  display: inline-block;
+  padding: 3px 8px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-top: 10px;
+  margin-right: 6px;
+  background: var(--cream);
+  color: var(--ink);
+}
+
+.comp-card.threat-high .tag.threat { background: var(--burgundy); color: var(--paper); }
+.comp-card.threat-med .tag.threat { background: var(--bronze); color: var(--paper); }
+.comp-card.threat-low .tag.threat { background: var(--moss); color: var(--paper); }
+
+/* Custom marker pulse for SIS */
+.sis-pulse {
+  background: var(--sis) !important;
+  border: 3px solid white !important;
+  border-radius: 50% !important;
+  box-shadow: 0 0 0 0 rgba(211, 47, 47, 0.6);
+  animation: sispulse 2s infinite;
+}
+
+@keyframes sispulse {
+  0% { box-shadow: 0 0 0 0 rgba(211, 47, 47, 0.6); }
+  70% { box-shadow: 0 0 0 20px rgba(211, 47, 47, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(211, 47, 47, 0); }
+}
+
+/* SIS BIG CALLOUT */
+.sis-callout {
+  max-width: 1400px;
+  margin: 80px auto 0;
+  padding: 56px;
+  background: var(--ink);
+  color: var(--paper);
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 64px;
+  position: relative;
+  overflow: hidden;
+}
+
+.sis-callout::before {
+  content: 'SIS';
+  position: absolute;
+  right: -40px;
+  top: -60px;
+  font-family: 'Fraunces', serif;
+  font-size: 400px;
+  font-weight: 900;
+  color: rgba(211, 47, 47, 0.06);
+  line-height: 0.8;
+  letter-spacing: -0.05em;
+  pointer-events: none;
+}
+
+.sis-callout .label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--sis);
+  margin-bottom: 20px;
+}
+
+.sis-callout h3 {
+  font-family: 'Fraunces', serif;
+  font-size: 44px;
+  font-weight: 300;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  margin-bottom: 28px;
+}
+
+.sis-callout h3 em {
+  font-style: italic;
+  color: var(--accent);
+}
+
+.sis-callout p {
+  font-family: 'Fraunces', serif;
+  font-size: 17px;
+  color: var(--cream);
+  line-height: 1.6;
+  max-width: 600px;
+}
+
+.sis-facts {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  position: relative;
+  z-index: 2;
+}
+
+.sis-fact {
+  padding-bottom: 18px;
+  border-bottom: 1px solid rgba(212, 165, 116, 0.2);
+}
+
+.sis-fact .k {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 6px;
+}
+
+.sis-fact .v {
+  font-family: 'Fraunces', serif;
+  font-size: 24px;
+  font-weight: 400;
+  color: var(--paper);
+  line-height: 1.2;
+}
+
+.sis-fact .v em {
+  color: var(--accent);
+  font-style: italic;
+}
+
+/* QUADRANTE COMPETITIVO */
+.quad-competitive {
+  max-width: 1400px;
+  margin: 80px auto 0;
+}
+
+.quad-header {
+  margin-bottom: 40px;
+}
+
+.quad-header h3 {
+  font-family: 'Fraunces', serif;
+  font-size: clamp(32px, 4vw, 54px);
+  font-weight: 300;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  margin-top: 16px;
+  color: var(--paper);
+}
+
+.quad-header h3 em {
+  font-style: italic;
+  color: var(--accent);
+}
+
+.quad-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+.quad-card {
+  padding: 32px;
+  border: 1px solid rgba(212, 165, 116, 0.25);
+  background: rgba(255, 255, 255, 0.02);
+  position: relative;
+  transition: all 0.3s;
+}
+
+.quad-card.threat-high {
+  border-left: 3px solid var(--sis);
+}
+
+.quad-card.threat-med {
+  border-left: 3px solid var(--bronze);
+}
+
+.quad-card.quad-card-wide {
+  grid-column: 1 / -1;
+  background: linear-gradient(135deg, rgba(168, 127, 74, 0.08), rgba(107, 31, 36, 0.04));
+}
+
+.quad-card.quad-card-wide h4 {
+  font-size: 32px;
+}
+
+.quad-card:hover {
+  background: rgba(212, 165, 116, 0.04);
+  border-color: var(--accent);
+}
+
+.quad-card.threat-high:hover { border-left-color: var(--sis); }
+.quad-card.threat-med:hover { border-left-color: var(--bronze); }
+
+.qc-tag {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 16px;
+}
+
+.qc-tag em {
+  color: var(--accent);
+  font-style: normal;
+}
+
+.quad-card h4 {
+  font-family: 'Fraunces', serif;
+  font-size: 30px;
+  font-weight: 400;
+  letter-spacing: -0.025em;
+  color: var(--paper);
+  margin-bottom: 6px;
+  line-height: 1.05;
+  position: relative;
+  padding-top: 14px;
+}
+
+.quad-card h4::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 48px;
+  height: 1px;
+  background: var(--accent);
+  opacity: 0.5;
+}
+
+.qc-when {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 16px;
+}
+
+.quad-card p {
+  font-size: 14px;
+  color: var(--cream);
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+
+.quad-card p strong {
+  color: var(--paper);
+  font-weight: 500;
+}
+
+.qc-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 14px;
+  padding: 14px 0;
+  border-top: 1px solid rgba(212, 165, 116, 0.15);
+  border-bottom: 1px solid rgba(212, 165, 116, 0.15);
+  margin-bottom: 16px;
+}
+
+.qc-meta span {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.qc-meta span em {
+  color: var(--accent);
+  font-style: normal;
+}
+
+.qc-response .qc-r-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 8px;
+}
+
+.qc-r-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.qc-r-tags span {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  background: rgba(212, 165, 116, 0.12);
+  color: var(--accent);
+  border: 1px solid rgba(212, 165, 116, 0.3);
+}
+
+/* MERCADO - SEÇÃO 2 */
+.market-grid {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 24px;
+}
+
+.market-card {
+  padding: 36px 32px;
+  border: 1px solid rgba(212, 165, 116, 0.25);
+  background: rgba(255, 255, 255, 0.02);
+  position: relative;
+  transition: all 0.3s;
+}
+
+.market-card:hover {
+  background: rgba(212, 165, 116, 0.05);
+  border-color: var(--accent);
+}
+
+.market-card .kicker {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.market-card .big {
+  font-family: 'Fraunces', serif;
+  font-size: 68px;
+  font-weight: 300;
+  line-height: 0.95;
+  letter-spacing: -0.03em;
+  color: var(--paper);
+  margin-bottom: 8px;
+}
+
+.market-card .big .unit {
+  font-size: 26px;
+  color: var(--accent);
+  font-style: italic;
+}
+
+.market-card .mid {
+  font-family: 'Fraunces', serif;
+  font-size: 20px;
+  font-weight: 400;
+  color: var(--cream);
+  line-height: 1.3;
+  margin-bottom: 20px;
+}
+
+.market-card p {
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.55;
+}
+
+.market-card.span-4 { grid-column: span 4; }
+.market-card.span-6 { grid-column: span 6; }
+.market-card.span-8 { grid-column: span 8; }
+.market-card.span-12 { grid-column: span 12; }
+
+.market-card.feature {
+  background: linear-gradient(135deg, rgba(168, 127, 74, 0.15), rgba(107, 31, 36, 0.1));
+  border-color: var(--bronze);
+}
+
+.quote-big {
+  grid-column: span 12;
+  padding: 48px 0 24px;
+}
+
+.quote-big blockquote {
+  font-family: 'Fraunces', serif;
+  font-size: clamp(28px, 3vw, 44px);
+  font-weight: 300;
+  font-style: italic;
+  line-height: 1.2;
+  color: var(--paper);
+  max-width: 1100px;
+  letter-spacing: -0.02em;
+}
+
+.quote-big blockquote::before {
+  content: '"';
+  display: block;
+  font-size: 120px;
+  color: var(--accent);
+  line-height: 0.5;
+  margin-bottom: 20px;
+  font-family: 'Fraunces', serif;
+}
+
+/* Bars chart custom */
+.bar-row {
+  display: grid;
+  grid-template-columns: 200px 1fr 80px;
+  gap: 16px;
+  align-items: center;
+  padding: 14px 0;
+  border-bottom: 1px solid rgba(212, 165, 116, 0.15);
+}
+
+.bar-row:last-child { border-bottom: none; }
+
+.bar-label {
+  font-family: 'Fraunces', serif;
+  font-size: 16px;
+  color: var(--paper);
+}
+
+.bar-label .sub {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: var(--muted);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  display: block;
+  margin-top: 2px;
+}
+
+.bar-track {
+  height: 10px;
+  background: rgba(212, 165, 116, 0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+.bar-fill {
+  position: absolute;
+  top: 0; left: 0;
+  height: 100%;
+  background: var(--accent);
+  transition: width 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+  width: 0;
+}
+
+.bar-fill.burgundy { 
+  background: var(--accent); 
+  box-shadow: 0 0 0 1px rgba(212, 165, 116, 0.6), 0 0 20px rgba(212, 165, 116, 0.3);
+}
+.bar-fill.bronze { background: var(--bronze); }
+.bar-fill.moss { background: var(--moss); }
+
+.bar-val {
+  font-family: 'Fraunces', serif;
+  font-size: 22px;
+  color: var(--accent);
+  font-weight: 500;
+  text-align: right;
+}
+
+/* TENDÊNCIAS - SEÇÃO 3 */
+.trends-intro {
+  max-width: 1400px;
+  margin: 0 auto 80px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 64px;
+}
+
+.trend-list {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.trend-item {
+  display: grid;
+  grid-template-columns: 100px 1fr 220px;
+  gap: 48px;
+  padding: 48px 0;
+  border-top: 1px solid rgba(212, 165, 116, 0.25);
+  align-items: start;
+  transition: padding-left 0.4s;
+  cursor: pointer;
+  position: relative;
+}
+
+.trend-item:hover {
+  padding-left: 20px;
+}
+
+.trend-item:hover::before {
+  content: '→';
+  position: absolute;
+  left: 0;
+  top: 48px;
+  color: var(--accent);
+  font-size: 20px;
+  animation: fadeIn 0.3s forwards;
+}
+
+.trend-item:last-child {
+  border-bottom: 1px solid rgba(212, 165, 116, 0.25);
+}
+
+.trend-num {
+  font-family: 'Fraunces', serif;
+  font-size: 56px;
+  font-weight: 300;
+  color: var(--accent);
+  line-height: 0.9;
+  letter-spacing: -0.03em;
+  font-style: italic;
+}
+
+.trend-body h3 {
+  font-family: 'Fraunces', serif;
+  font-size: 34px;
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  margin-bottom: 16px;
+  color: var(--paper);
+}
+
+.trend-body h3 em { font-style: italic; color: var(--accent); }
+
+.trend-body p {
+  font-size: 15px;
+  color: var(--cream);
+  line-height: 1.6;
+  max-width: 680px;
+}
+
+.trend-body .micro {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 12px;
+}
+
+.trend-tag {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.trend-tag .t {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 5px 10px;
+  border: 1px solid var(--accent);
+  color: var(--accent);
+  align-self: flex-start;
+}
+
+/* RECOMENDAÇÕES FINAIS */
+.reco-section {
+  padding: 140px 48px;
+  background: var(--paper);
+  color: var(--ink);
+}
+
+.reco-wrap {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.reco-header {
+  margin-bottom: 80px;
+  max-width: 900px;
+}
+
+.reco-kicker {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--burgundy);
+  margin-bottom: 24px;
+}
+
+.reco-header h2 {
+  font-family: 'Fraunces', serif;
+  font-size: clamp(42px, 5vw, 72px);
+  font-weight: 300;
+  line-height: 1;
+  letter-spacing: -0.03em;
+}
+
+.reco-header h2 em {
+  color: var(--burgundy);
+  font-style: italic;
+}
+
+.reco-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0;
+  border-top: 1px solid var(--line);
+}
+
+.reco-col {
+  padding: 40px 32px;
+  border-right: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+
+.reco-col:last-child { border-right: none; }
+
+.reco-col .h {
+  font-family: 'Fraunces', serif;
+  font-size: 24px;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  margin-bottom: 20px;
+  color: var(--burgundy);
+}
+
+.reco-col ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.reco-col li {
+  font-size: 14px;
+  line-height: 1.6;
+  padding-left: 20px;
+  position: relative;
+}
+
+.reco-col li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 8px;
+  width: 10px;
+  height: 1px;
+  background: var(--bronze);
+}
+
+.reco-col li strong {
+  font-weight: 600;
+  color: var(--ink);
+  font-family: 'Fraunces', serif;
+  display: block;
+  margin-bottom: 4px;
+  font-size: 15px;
+}
+
+/* APÊNDICE METODOLÓGICO */
+.method-section {
+  padding: 120px 48px;
+  background: var(--ink);
+  color: var(--paper);
+  border-top: 1px solid rgba(212, 165, 116, 0.15);
+}
+
+.method-wrap {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.method-header {
+  margin-bottom: 72px;
+  max-width: 900px;
+}
+
+.method-kicker {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 24px;
+}
+
+.method-header h2 {
+  font-family: 'Fraunces', serif;
+  font-size: clamp(40px, 5vw, 68px);
+  font-weight: 300;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  color: var(--paper);
+}
+
+.method-header h2 em {
+  color: var(--accent);
+  font-style: italic;
+}
+
+.method-intro {
+  font-family: 'Fraunces', serif;
+  font-size: 19px;
+  line-height: 1.5;
+  color: var(--cream);
+  margin-top: 28px;
+  max-width: 780px;
+}
+
+.method-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0;
+  border-top: 1px solid rgba(212, 165, 116, 0.2);
+}
+
+.method-col {
+  padding: 40px 32px 32px 0;
+  border-right: 1px solid rgba(212, 165, 116, 0.2);
+  border-bottom: 1px solid rgba(212, 165, 116, 0.2);
+}
+
+.method-col:nth-child(1) { padding-right: 40px; }
+.method-col:nth-child(2) { padding: 40px 40px 32px 32px; }
+.method-col:nth-child(3) { padding: 40px 0 32px 32px; border-right: none; }
+
+.method-col .mh {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 24px;
+}
+
+.method-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.method-list li {
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--cream);
+  padding-left: 20px;
+  position: relative;
+}
+
+.method-list li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 8px;
+  width: 10px;
+  height: 1px;
+  background: var(--bronze);
+}
+
+.method-list li strong {
+  font-family: 'Fraunces', serif;
+  font-weight: 500;
+  color: var(--paper);
+  display: block;
+  margin-bottom: 4px;
+  font-size: 14px;
+  font-style: italic;
+}
+
+.method-footer {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+  margin-top: 40px;
+  padding-top: 32px;
+  border-top: 1px solid rgba(212, 165, 116, 0.2);
+}
+
+.mf-item .mf-k {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 6px;
+}
+
+.mf-item .mf-v {
+  font-family: 'Fraunces', serif;
+  font-size: 15px;
+  color: var(--paper);
+  line-height: 1.3;
+}
+
+/* FOOTER */
+footer {
+  padding: 48px;
+  background: var(--ink);
+  color: var(--muted);
+  border-top: 1px solid var(--line);
+}
+
+.foot {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+footer .sig {
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  font-size: 14px;
+  color: var(--accent);
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+/* responsive */
+@media (max-width: 1024px) {
+  .map-wrapper { grid-template-columns: 1fr; }
+  .competitors-panel { max-height: none; }
+  #map { height: 480px; }
+  .sis-callout { grid-template-columns: 1fr; padding: 40px; }
+  .quad-grid { grid-template-columns: 1fr; }
+  .trends-intro { grid-template-columns: 1fr; }
+  .trend-item { grid-template-columns: 60px 1fr; }
+  .trend-tag { display: none; }
+  .reco-grid { grid-template-columns: 1fr; }
+  .method-grid { grid-template-columns: 1fr; }
+  .method-col { padding: 32px 0 !important; border-right: none !important; }
+  .method-footer { grid-template-columns: repeat(2, 1fr); }
+  .market-card.span-4, .market-card.span-6, .market-card.span-8 { grid-column: span 12; }
+  nav.top ul { display: none; }
+  nav.top { padding: 16px 24px; }
+  .hero { padding: 100px 24px 60px; }
+  .hero-footer { flex-direction: column; align-items: flex-start; gap: 32px; }
+  .hero-stats { flex-wrap: wrap; gap: 32px; }
+  section.block { padding: 80px 24px; }
+  .section-header { grid-template-columns: 1fr; gap: 16px; }
+  .reco-section { padding: 80px 24px; }
+}
+</style>
+</head>
+<body>
+
+<div class="grain"></div>
+
+<nav class="top">
+  <div class="brand">CSA Nova Lima · <span>Panorama 2026</span></div>
+  <ul>
+    <li><a href="#mapa">01 Concorrência</a></li>
+    <li><a href="#mercado">02 Mercado</a></li>
+    <li><a href="#tendencias">03 Tendências</a></li>
+    <li><a href="#recomendacoes">04 Ação</a></li>
+    <li><a href="#metodologia">05 Método</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<header class="hero">
+  <div>
+    <div class="hero-meta">
+      <span class="dot"></span>
+      <span>Documento de trabalho · Abril 2026</span>
+    </div>
+    <h1 class="hero-title">
+      O território, o <em>mercado</em><br>
+      <span class="ampersand">&</span> o que vem<br>
+      depois de <em>2027</em>.
+    </h1>
+    <p class="hero-sub">
+      Panorama estratégico para <strong>CSA Nova Lima</strong>: mapa competitivo da região, potencial de mercado, e tendências globais que redesenham a educação básica privada. Nova Lima opera num mercado com <strong>densidade competitiva muito menor</strong> que BH, com faturamento médio por escola <strong>cerca de 3x maior</strong>. A pergunta é como defender e expandir essa posição.
+    </p>
+  </div>
+
+  <div class="hero-footer">
+    <div class="hero-stats">
+      <div class="stat">
+        <div class="stat-num">12</div>
+        <div class="stat-label">Escolas privadas em Nova Lima (Neoway, 2022)</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">5.968</div>
+        <div class="stat-label">Alunos em escolas privadas em NL · 497 por escola</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">R$ 274mi</div>
+        <div class="stat-label">Faturamento anual somado das 12 escolas privadas de NL</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">Jan/2027</div>
+        <div class="stat-label">Abertura SIS Belvedere · chega em janeiro</div>
+      </div>
+    </div>
+    <div class="scroll-hint">Rolar para começar</div>
+  </div>
+</header>
+
+<!-- SEÇÃO 1: MAPA COMPETITIVO -->
+<section class="block dark" id="mapa">
+  <div class="section-header">
+    <div><span class="section-num">01 · Território</span></div>
+    <div>
+      <h2 class="section-title">O radar de quem <em>disputa</em> o mesmo aluno.</h2>
+      <p class="section-lede">
+        Três raios a partir da CSA Nova Lima delimitam a zona competitiva: 2 km de vizinhança direta (Fundação Torino, Bernoulli Vale do Sereno), 5 km de zona crítica (Belvedere e SIS a partir de 2027), e 10 km de mercado estendido (Bernoulli Cidade Jardim, Escola do Sebrae, Logosófico). No mesmo mapa, também mostramos ofertas de contraturno (inglês, tecnologia, empreendedorismo, intercâmbio), que disputam o mesmo orçamento familiar.
+      </p>
+    </div>
+  </div>
+
+  <div class="map-wrapper">
+    <div class="map-side">
+      <div class="map-controls">
+        <div class="mc-label">Exibir no radar</div>
+        <div class="mc-buttons">
+          <button class="mc-btn active" data-filter="all">Tudo</button>
+          <button class="mc-btn" data-filter="schools">Escolas</button>
+          <button class="mc-btn" data-filter="contra">Contraturno</button>
+        </div>
+        <div class="mc-label" style="margin-top:20px">Raios a partir de CSA Nova Lima</div>
+        <div class="mc-radius">
+          <span class="rad r2"></span> 2 km · vizinhança direta
+        </div>
+        <div class="mc-radius">
+          <span class="rad r5"></span> 5 km · zona competitiva crítica
+        </div>
+        <div class="mc-radius">
+          <span class="rad r10"></span> 10 km · mercado estendido
+        </div>
+      </div>
+      <div id="map"></div>
+    </div>
+    <div class="competitors-panel" id="comp-panel">
+      <!-- Populated by JS -->
+    </div>
+  </div>
+
+  <!-- QUADRANTE COMPETITIVO -->
+  <div class="quad-competitive">
+    <div class="quad-header">
+      <span class="section-num">Quadrante competitivo · 4 ameaças diretas + 1 padrão de evasão</span>
+      <h3>Cada concorrente força uma <em>resposta diferente</em>.</h3>
+    </div>
+
+    <div class="quad-grid">
+
+      <div class="quad-card threat-high">
+        <div class="qc-tag">Ameaça de <em>captura direta</em></div>
+        <h4>Bernoulli Vale do Sereno</h4>
+        <div class="qc-when">Nova Lima · 2 km daqui · desde fev/2025</div>
+        <p><strong>Vizinho novíssimo e o mais agressivo.</strong> 40 mil m² construídos, R$ 250 milhões investidos, infraestrutura premium. A escola mais cara de BH/Nova Lima em 2026: R$ 5.778 na 3ª série do EM. Traz a marca Bernoulli (topo ENEM há anos) para o território da CSA. Tem tirado alunos diretamente do Vale dos Cristais desde a abertura.</p>
+        <div class="qc-meta">
+          <span>Mensalidade: <em>R$ 2 a 5,8k</em></span>
+          <span>Distância: 2 km</span>
+          <span>Capacidade: 2.800 alunos</span>
+        </div>
+        <div class="qc-response">
+          <div class="qc-r-label">Exige resposta em:</div>
+          <div class="qc-r-tags">
+            <span>Retenção</span>
+            <span>Infraestrutura</span>
+            <span>Resultado ENEM</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="quad-card threat-high">
+        <div class="qc-tag">Ameaça de <em>mudança de jogo</em></div>
+        <h4>SIS Swiss International</h4>
+        <div class="qc-when">Belvedere · Jan 2027 · 4 km daqui · 4ª unidade BR</div>
+        <p><strong>Entrante internacional com modelo testado no Brasil.</strong> 1ª unidade em MG da rede suíça. A SIS já opera três escolas no país: <strong>ESB Rio de Janeiro</strong> (Barra da Tijuca, a mais antiga, ~1.000 alunos, ensino PT-EN, PT-DE e PT-FR), <strong>Escola Nova by SIS</strong> (Jardim Botânico RJ, adquirida em 2022, começou bilíngue em 2024), e <strong>SIS Brasília</strong> (Asa Sul, IB World School com PYP e MYP). Todas têm IB Diploma. O modelo de entrada em BH combina construção do zero (como Brasília) com escala gradual a partir da base. Integral bilíngue, R$ 60-80k/ano, redefine teto de preço no eixo Belvedere / Vale dos Cristais.</p>
+        <div class="qc-meta">
+          <span>Mensalidade: <em>R$ 5 a 6,7k</em></span>
+          <span>Capacidade: 450 alunos</span>
+          <span>Público inicial: base (3-7 anos)</span>
+          <span>Rede global: 20 escolas, 5 mil alunos</span>
+        </div>
+        <div class="qc-response">
+          <div class="qc-r-label">Exige resposta em:</div>
+          <div class="qc-r-tags">
+            <span>Posicionamento</span>
+            <span>Internacionalização</span>
+            <span>Certificação</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="quad-card threat-med">
+        <div class="qc-tag">Ameaça de <em>referência estabelecida</em></div>
+        <h4>Colégio Edna Roriz</h4>
+        <div class="qc-when">Belvedere · consolidado há 26 anos</div>
+        <p><strong>Uma referência do território, não do segmento.</strong> Multicultural há mais de duas décadas, atendimento individualizado, captura um nicho específico de família do Belvedere e Vale dos Cristais. Não compete diretamente pelo mesmo aluno em escala, mas faz parte do panorama de alternativas premium disponíveis na região.</p>
+        <div class="qc-meta">
+          <span>Mensalidade: <em>R$ ~5k</em></span>
+          <span>Localização: Belvedere</span>
+          <span>Perfil: internacional nicho</span>
+        </div>
+        <div class="qc-response">
+          <div class="qc-r-label">Exige resposta em:</div>
+          <div class="qc-r-tags">
+            <span>Identidade própria</span>
+            <span>Valor percebido</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="quad-card threat-high">
+        <div class="qc-tag">Ameaça de <em>captura no Fundamental I</em></div>
+        <h4>Santa Maria Minas Nova Lima</h4>
+        <div class="qc-when">Centro de Nova Lima · fundado em 1903 · rede PUC/Arquidiocese</div>
+        <p><strong>A escola tradicional da cidade.</strong> Rede Santa Maria Minas tem 13 unidades em BH/RMBH e é a instituição particular mais antiga de BH (122 anos). A unidade Nova Lima, na Av. Rio Branco, oferece da Educação Infantil ao Ensino Médio. Compete diretamente com a CSA NL <strong>especialmente no Fundamental I</strong>, onde famílias priorizam localização no centro da cidade, tradição católica e preço mais acessível. Perder aluno nessa fase não é só uma matrícula, é um ciclo escolar inteiro que vai embora.</p>
+        <div class="qc-meta">
+          <span>Foco na disputa: <em>Fundamental I</em></span>
+          <span>Localização: Centro NL</span>
+          <span>Perfil: católico tradicional</span>
+        </div>
+        <div class="qc-response">
+          <div class="qc-r-label">Exige resposta em:</div>
+          <div class="qc-r-tags">
+            <span>Retenção no Fund I</span>
+            <span>Diferenciação no início</span>
+            <span>Ritual de entrada na escola</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="quad-card quad-card-wide threat-high">
+        <div class="qc-tag">Ameaça de <em>fuga programada</em> · 9º ano ➝ Ensino Médio</div>
+        <h4>Escola do Sebrae</h4>
+        <div class="qc-when">Nova Granada, BH · 30 anos · Padrão de evasão recorrente da CSA NL</div>
+        <p><strong>Um caso diferente de todos os outros.</strong> Não é concorrente lado a lado, é um destino de migração no momento exato em que a família repensa o Ensino Médio. Oferece apenas EM integrado ao Técnico em Administração ou Marketing, metodologia austríaca (empresa simulada, missões internacionais em NY e Barcelona), 266 vagas em 2026 com mais de 5 candidatos por vaga. Seletiva (prova, dinâmica, entrevista em inglês). Captura o aluno de 9º ano que quer algo diferente do "mais do mesmo" escolar tradicional.</p>
+        <div class="qc-meta">
+          <span>Foco: <em>Ensino Médio + Técnico</em></span>
+          <span>Entrada: 9º ano concluído</span>
+          <span>Demanda: 5 candidatos/vaga</span>
+          <span>Diferencial: empreendedorismo prático</span>
+        </div>
+        <div class="qc-response">
+          <div class="qc-r-label">A pergunta que o aluno CSA faz no 9º ano:</div>
+          <div class="qc-r-tags">
+            <span>"Quero algo diferente?"</span>
+            <span>"Quero empreender?"</span>
+            <span>"Quero uma ponte para o mundo real?"</span>
+          </div>
+        </div>
+        <div class="qc-response" style="margin-top:16px">
+          <div class="qc-r-label">Exige resposta em:</div>
+          <div class="qc-r-tags">
+            <span>Itinerário formativo próprio</span>
+            <span>Empreendedorismo na grade</span>
+            <span>Empresa simulada ou projeto real</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- SEÇÃO 2: MERCADO -->
+<section class="block burgundy" id="mercado">
+  <div class="section-header">
+    <div><span class="section-num">02 · Potencial</span></div>
+    <div>
+      <h2 class="section-title">O território vale <em>muito mais</em> do que parece.</h2>
+      <p class="section-lede">
+        Nova Lima tem apenas 12 escolas privadas, mas cada uma fatura em média R$ 12,5 milhões/ano, quase três vezes mais que a média de Belo Horizonte. São 5.968 alunos privados distribuídos em poucas escolas, o que resulta em 497 alunos por escola (o dobro da média BH). Somado a isso: famílias classe A da região têm gasto efetivo com educação que vai muito além da mensalidade escolar.
+      </p>
+    </div>
+  </div>
+
+  <div class="market-grid">
+
+    <!-- NOVA LIMA vs BH -->
+    <div class="market-card feature span-12">
+      <div class="kicker"><span>🏙️ Nova Lima vs Belo Horizonte · Mapa estrutural do mercado</span><span>Neoway/Receita Federal · 2022</span></div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:48px;margin-top:16px">
+
+        <div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.15em;text-transform:uppercase;color:var(--accent);margin-bottom:16px">Nova Lima · onde estamos</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px 24px">
+            <div>
+              <div style="font-family:'Fraunces',serif;font-size:40px;font-weight:300;color:var(--paper);line-height:1;">12</div>
+              <div style="font-size:12px;color:var(--cream);opacity:0.8;margin-top:4px">escolas privadas</div>
+            </div>
+            <div>
+              <div style="font-family:'Fraunces',serif;font-size:40px;font-weight:300;color:var(--paper);line-height:1;">5.968</div>
+              <div style="font-size:12px;color:var(--cream);opacity:0.8;margin-top:4px">alunos privados</div>
+            </div>
+            <div>
+              <div style="font-family:'Fraunces',serif;font-size:40px;font-weight:300;color:var(--accent);line-height:1;">497</div>
+              <div style="font-size:12px;color:var(--cream);opacity:0.8;margin-top:4px">alunos / escola</div>
+            </div>
+            <div>
+              <div style="font-family:'Fraunces',serif;font-size:40px;font-weight:300;color:var(--accent);line-height:1;">R$ 12,5M</div>
+              <div style="font-size:12px;color:var(--cream);opacity:0.8;margin-top:4px">faturamento médio anual</div>
+            </div>
+          </div>
+          <div style="margin-top:20px;padding-top:20px;border-top:1px solid rgba(212,165,116,0.2);font-family:'Fraunces',serif;font-size:15px;color:var(--cream);line-height:1.5;">Faturamento anual somado das 12 escolas privadas de Nova Lima: <strong style="color:var(--paper)">R$ 274,7 milhões</strong>.</div>
+        </div>
+
+        <div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.15em;text-transform:uppercase;color:var(--muted);margin-bottom:16px">Belo Horizonte · referência</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px 24px;opacity:0.75">
+            <div>
+              <div style="font-family:'Fraunces',serif;font-size:40px;font-weight:300;color:var(--paper);line-height:1;">562</div>
+              <div style="font-size:12px;color:var(--cream);opacity:0.8;margin-top:4px">escolas privadas</div>
+            </div>
+            <div>
+              <div style="font-family:'Fraunces',serif;font-size:40px;font-weight:300;color:var(--paper);line-height:1;">114.935</div>
+              <div style="font-size:12px;color:var(--cream);opacity:0.8;margin-top:4px">alunos privados</div>
+            </div>
+            <div>
+              <div style="font-family:'Fraunces',serif;font-size:40px;font-weight:300;color:var(--paper);line-height:1;">205</div>
+              <div style="font-size:12px;color:var(--cream);opacity:0.8;margin-top:4px">alunos / escola</div>
+            </div>
+            <div>
+              <div style="font-family:'Fraunces',serif;font-size:40px;font-weight:300;color:var(--paper);line-height:1;">R$ 4,5M</div>
+              <div style="font-size:12px;color:var(--cream);opacity:0.8;margin-top:4px">faturamento médio anual</div>
+            </div>
+          </div>
+          <div style="margin-top:20px;padding-top:20px;border-top:1px solid rgba(212,165,116,0.2);font-family:'Fraunces',serif;font-size:15px;color:var(--cream);line-height:1.5;opacity:0.8">Faturamento anual somado das 562 escolas privadas de BH: R$ 3,04 bilhões.</div>
+        </div>
+
+      </div>
+
+      <div style="margin-top:32px;padding:20px 24px;background:rgba(212,165,116,0.08);border-left:3px solid var(--accent)">
+        <div style="font-family:'Fraunces',serif;font-size:17px;color:var(--paper);line-height:1.5">
+          <strong>Nova Lima é um oceano menor, mas muito mais navegável.</strong> Mercado cerca de 11x menor que BH, densidade competitiva muito menor, faturamento por escola aproximadamente 3x maior. Quem está lá dentro tem escala, tíquete alto e baixa pressão competitiva direta.
+        </div>
+      </div>
+    </div>
+
+    <!-- FUNIL DE ALUNOS POR SÉRIE -->
+    <div class="market-card span-12">
+      <div class="kicker"><span>📊 Funil de alunos privados por série · Nova Lima</span><span>IBGE · 2022</span></div>
+      <div class="mid" style="margin-bottom:24px">Onde estão os alunos privados ao longo da jornada escolar. O 7º ano concentra o pico absoluto (617 alunos), Fundamental I e II são o grosso do mercado. Oportunidade para contraturno: todas as séries acima de 400 alunos são candidatas a produtos verticais.</div>
+
+      <div class="bar-row">
+        <div class="bar-label">Creche <span class="sub">0 a 3 anos</span></div>
+        <div class="bar-track"><div class="bar-fill" data-w="25"></div></div>
+        <div class="bar-val">327</div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">Pré-escola <span class="sub">4 a 5 anos</span></div>
+        <div class="bar-track"><div class="bar-fill bronze" data-w="58"></div></div>
+        <div class="bar-val">753</div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">1º ano <span class="sub">Fund I</span></div>
+        <div class="bar-track"><div class="bar-fill bronze" data-w="38"></div></div>
+        <div class="bar-val">487</div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">2º ano <span class="sub">Fund I</span></div>
+        <div class="bar-track"><div class="bar-fill bronze" data-w="42"></div></div>
+        <div class="bar-val">543</div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">3º ano <span class="sub">Fund I</span></div>
+        <div class="bar-track"><div class="bar-fill bronze" data-w="43"></div></div>
+        <div class="bar-val">563</div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">4º ano <span class="sub">Fund I</span></div>
+        <div class="bar-track"><div class="bar-fill bronze" data-w="43"></div></div>
+        <div class="bar-val">558</div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">5º ano <span class="sub">Fund I</span></div>
+        <div class="bar-track"><div class="bar-fill bronze" data-w="42"></div></div>
+        <div class="bar-val">536</div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">6º ano <span class="sub">Fund II</span></div>
+        <div class="bar-track"><div class="bar-fill" data-w="44"></div></div>
+        <div class="bar-val">572</div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">7º ano <span class="sub">Fund II · PICO</span></div>
+        <div class="bar-track"><div class="bar-fill burgundy" data-w="47"></div></div>
+        <div class="bar-val">617</div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">8º ano <span class="sub">Fund II</span></div>
+        <div class="bar-track"><div class="bar-fill" data-w="42"></div></div>
+        <div class="bar-val">542</div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">9º ano <span class="sub">Fund II</span></div>
+        <div class="bar-track"><div class="bar-fill" data-w="36"></div></div>
+        <div class="bar-val">470</div>
+      </div>
+
+      <p style="margin-top:20px; font-size:12px; color: var(--cream); opacity: 0.75;">
+        IBGE 2022, matrículas em escolas privadas, município de Nova Lima. Dados do Censo Escolar via IBGE Cidades. Totais: 4.294 Ed. Infantil, 2.687 Fund I, 2.201 Fund II. Não inclui Ensino Médio (dados não disponibilizados no levantamento original).
+      </p>
+    </div>
+
+    <!-- FAMÍLIA CLASSE A -->
+    <div class="market-card feature span-8">
+      <div class="kicker"><span>💸 Gasto médio mensal · família classe A</span><span>POF/IBGE · análise iDados</span></div>
+      <div class="big">R$ 2.938<span class="unit"> /mês</span></div>
+      <div class="mid">Gasto médio em educação das famílias com renda per capita acima de R$ 10 mil. Representa quase 8% de toda a despesa mensal, quase três vezes o percentual da classe baixa.</div>
+      <p>O número inclui mensalidade escolar, cursos extras, material, uniforme. A mensalidade da CSA NL (estimando R$ 2.500 para o segmento) cabe nessa conta e deixa de R$ 400 a R$ 500 mensais de orçamento livre por aluno para contraturno e atividades complementares, antes de comprometer o padrão de gasto da família.</p>
+    </div>
+
+    <div class="market-card span-4">
+      <div class="kicker"><span>🌐 Bilíngue Brasil</span><span>ABEBI</span></div>
+      <div class="big">1.200+</div>
+      <div class="mid">Escolas bilíngues no país. Crescimento superior a 10% em 5 anos.</div>
+      <p>A procura por ensino bilíngue deixou de ser tendência para virar padrão de entrada no segmento premium.</p>
+    </div>
+
+    <div class="market-card span-4">
+      <div class="kicker"><span>✈️ Intercâmbio</span><span>Belta · ano fechado 2024</span></div>
+      <div class="big">+15%</div>
+      <div class="mid">Crescimento de 2024 vs 2023, R$ 540 milhões movimentados. 110 mil brasileiros estudando fora.</div>
+      <p>Canadá, EUA e Reino Unido lideram. 85,7% dos estudantes pesquisados pela Belta declararam interesse em fazer intercâmbio. Consolidação de 2025 sai em abril/2026.</p>
+    </div>
+
+    <div class="market-card span-4">
+      <div class="kicker"><span>🎯 Setor educacional BR</span><span>Último ano cheio · 2022-23</span></div>
+      <div class="big">+9%</div>
+      <div class="mid">Crescimento de faturamento do setor educacional no último ano consolidado.</div>
+      <p>Forte resiliência macroeconômica. Famílias tratam educação como último gasto a cortar, mesmo em ciclos de contração.</p>
+    </div>
+
+    <div class="market-card span-4">
+      <div class="kicker"><span>💰 Gasto público / aluno</span><span>Todos pela Educação · 2023</span></div>
+      <div class="big">R$ 12,5k</div>
+      <div class="mid">Gasto público anual por aluno da educação básica, contra R$ 8,3 mil em 2013.</div>
+      <p>Aumento de 50% em 10 anos eleva o benchmark de qualidade. Escolas privadas precisam justificar prêmio sobre rede pública cada vez mais equipada.</p>
+    </div>
+
+    <!-- BARRAS -->
+    <div class="market-card span-12">
+      <div class="kicker"><span>🎓 Mensalidades de referência · Grande BH / Nova Lima</span><span>3ª série EM · 2026 (Mercado Mineiro)</span></div>
+      <div class="mid" style="margin-bottom:32px">Posicionamento de preço dos principais players da região. O Ensino Médio na 3ª série é a referência mais usada por ser a mensalidade mais alta do ciclo. Variação total observada: R$ 2.118 a R$ 5.778.</div>
+
+      <div class="bar-row">
+        <div class="bar-label">SIS Belvedere <span class="sub">Abertura 2027 · Integral Bilíngue</span></div>
+        <div class="bar-track"><div class="bar-fill burgundy" data-w="97"></div></div>
+        <div class="bar-val">R$ 5k-6,7k*</div>
+      </div>
+
+      <div class="bar-row">
+        <div class="bar-label">Bernoulli Vale do Sereno <span class="sub">Nova Lima · mais cara de BH 2026</span></div>
+        <div class="bar-track"><div class="bar-fill burgundy" data-w="100"></div></div>
+        <div class="bar-val">R$ 5.778</div>
+      </div>
+
+      <div class="bar-row">
+        <div class="bar-label">Edna Roriz <span class="sub">Belvedere · Internacional</span></div>
+        <div class="bar-track"><div class="bar-fill bronze" data-w="85"></div></div>
+        <div class="bar-val">R$ ~5k*</div>
+      </div>
+
+      <div class="bar-row">
+        <div class="bar-label">Bernoulli Cidade Jardim <span class="sub">Ex-Pitágoras, Prudente de Morais</span></div>
+        <div class="bar-track"><div class="bar-fill bronze" data-w="75"></div></div>
+        <div class="bar-val">R$ ~4-4,5k*</div>
+      </div>
+
+      <div class="bar-row">
+        <div class="bar-label">Bernoulli Lourdes <span class="sub">3ª série + pré-vestibular · ITA/IME</span></div>
+        <div class="bar-track"><div class="bar-fill" data-w="66"></div></div>
+        <div class="bar-val">R$ ~3,7k*</div>
+      </div>
+
+      <div class="bar-row">
+        <div class="bar-label">Fundação Torino <span class="sub">Piemonte · Italiano</span></div>
+        <div class="bar-track"><div class="bar-fill" data-w="45"></div></div>
+        <div class="bar-val">R$ ~2,5k*</div>
+      </div>
+
+      <div class="bar-row">
+        <div class="bar-label">Colégio Loyola <span class="sub">Lourdes · tradicional, mais próximo de NL</span></div>
+        <div class="bar-track"><div class="bar-fill" data-w="50"></div></div>
+        <div class="bar-val">R$ ~2,8k*</div>
+      </div>
+
+      <div class="bar-row">
+        <div class="bar-label">Colégio Marista Dom Silvério <span class="sub">Padre Eustáquio BH · rede Marista</span></div>
+        <div class="bar-track"><div class="bar-fill" data-w="48"></div></div>
+        <div class="bar-val">R$ ~2,7k*</div>
+      </div>
+
+      <div class="bar-row">
+        <div class="bar-label">CSA Nova Lima <span class="sub">referência · valor a confirmar internamente</span></div>
+        <div class="bar-track"><div class="bar-fill moss" data-w="42"></div></div>
+        <div class="bar-val">a verificar</div>
+      </div>
+
+      <p style="margin-top:24px; font-size:12px; color: var(--cream); opacity: 0.75;">
+        Dados consolidados da pesquisa Mercado Mineiro 2026 para Bernoulli Vale do Sereno. Demais valores são estimativas de reportagens 2024-2026 e podem ter defasagem; valores marcados com * são aproximações. O valor da mensalidade da CSA NL deve ser preenchido com dados internos. Intervalo de mercado 2026 EM: R$ 2.118 a R$ 5.778, variação de 172,8%.
+      </p>
+    </div>
+
+    <!-- ABUTRES - Contraturno como receita que escapa -->
+    <div class="market-card span-12">
+      <div class="kicker"><span>🎯 Somos surpreendidos por onde normalmente não estamos olhando · mercado paralelo de produtos educacionais</span><span>Faixas 2025-2026 · aproximadas</span></div>
+      <div class="mid" style="margin-bottom:16px">Não são concorrentes lado a lado. São <strong>negócios de nicho específico</strong> que capturam pedaços do orçamento familiar que poderiam ser receita da própria escola. Cada categoria é uma linha de produto que a CSA NL pode transformar em oferta própria, com margem de marca e retenção, em vez de deixar o valor vazar para fora.</div>
+      <div class="mid" style="margin-bottom:32px; color: var(--accent); font-size: 16px;">A pergunta certa para cada item abaixo não é "quanto custa", é: <em>"isso poderia ser nosso?"</em></div>
+
+      <div class="bar-row">
+        <div class="bar-label">Robótica / Tecnologia Kids <span class="sub">SuperGeeks, Happy Code · crianças e adolescentes</span></div>
+        <div class="bar-track"><div class="bar-fill bronze" data-w="85"></div></div>
+        <div class="bar-val">~R$ 450-900</div>
+      </div>
+
+      <div class="bar-row">
+        <div class="bar-label">Inglês premium <span class="sub">Cultura Inglesa, CNA · certificação Cambridge</span></div>
+        <div class="bar-track"><div class="bar-fill bronze" data-w="70"></div></div>
+        <div class="bar-val">~R$ 500-700</div>
+      </div>
+
+      <div class="bar-row">
+        <div class="bar-label">Inglês tradicional <span class="sub">CCAA, Wizard, Fisk</span></div>
+        <div class="bar-track"><div class="bar-fill" data-w="45"></div></div>
+        <div class="bar-val">~R$ 300-500</div>
+      </div>
+
+      <div class="bar-row">
+        <div class="bar-label">Esportes de alta performance <span class="sub">Natação, ginástica, tênis</span></div>
+        <div class="bar-track"><div class="bar-fill" data-w="55"></div></div>
+        <div class="bar-val">~R$ 400-650</div>
+      </div>
+
+      <div class="bar-row">
+        <div class="bar-label">Educação financeira / Empreendedorismo jovem <span class="sub">Jovens Gênios, cursos especialistas</span></div>
+        <div class="bar-track"><div class="bar-fill" data-w="50"></div></div>
+        <div class="bar-val">~R$ 350-600</div>
+      </div>
+
+      <div class="bar-row">
+        <div class="bar-label">Música / Artes <span class="sub">Estúdios especializados, Casa do Sol</span></div>
+        <div class="bar-track"><div class="bar-fill" data-w="40"></div></div>
+        <div class="bar-val">~R$ 300-500</div>
+      </div>
+
+      <div class="bar-row">
+        <div class="bar-label">Intercâmbio estruturado <span class="sub">CI, STB, EF · 5 ou 6 alunos/ano</span></div>
+        <div class="bar-track"><div class="bar-fill burgundy" data-w="95"></div></div>
+        <div class="bar-val">~R$ 1k-3k/mês</div>
+      </div>
+
+      <p style="margin-top:24px; font-size:13px; color: var(--cream); line-height: 1.6;">
+        <strong style="color:var(--paper)">Valores são faixas aproximadas com base em consultas 2025-2026 na região, não cotações oficiais.</strong> Intercâmbio expresso em base mensal equivalente (programa típico R$ 15-45 mil por temporada).
+      </p>
+
+      <div style="margin-top:32px;padding:24px 28px;background:rgba(212,165,116,0.1);border-left:3px solid var(--accent)">
+        <div class="mid" style="margin-bottom:12px;color:var(--accent);font-family:'JetBrains Mono', monospace;font-size:11px;letter-spacing:0.15em;text-transform:uppercase;">A conta do vazamento</div>
+        <div style="font-family:'Fraunces', serif; font-size:18px; color: var(--paper); line-height: 1.5">
+          Uma família CSA NL tipicamente contrata <strong>2 a 3 dessas categorias</strong> simultaneamente. Isso soma entre <em style="color:var(--accent);font-style:normal">R$ 800 e R$ 1.500 por mês por aluno</em> saindo para fora da escola. Em uma base de 497 alunos, mesmo considerando 30% de adesão efetiva, isso representa <strong>R$ 100 a 220 mil mensais em receita que a escola poderia estar capturando</strong>, antes mesmo de pensar em aumento de mensalidade.
+        </div>
+      </div>
+
+      <div style="margin-top:20px;padding:24px 28px;background:rgba(107,31,36,0.15);border-left:3px solid var(--sis)">
+        <div class="mid" style="margin-bottom:12px;color:#d32f2f;font-family:'JetBrains Mono', monospace;font-size:11px;letter-spacing:0.15em;text-transform:uppercase;">Por que isso importa estrategicamente</div>
+        <div style="font-family:'Fraunces', serif; font-size:18px; color: var(--paper); line-height: 1.5">
+          Se os produtos de contraturno são <strong>commodity</strong> (robótica genérica, inglês comum, empreendedorismo importado), qualquer família troca por um preço melhor fora. Mas se são <strong>produtos CSA</strong>, com identidade agostiniana, metodologia própria e integração com o currículo, deixam de ser substituíveis. O ponto não é competir em preço com esses negócios, é tirá-los do cardápio da família.
+        </div>
+      </div>
+    </div>
+
+    <div class="quote-big">
+      <blockquote>
+        A chegada da SIS confirma uma leitura que já estava madura: Belvedere e Vale dos Cristais são o novo eixo premium de Minas, e o padrão internacional integral deixa de ser exceção para virar expectativa de classe alta.
+      </blockquote>
+    </div>
+  </div>
+</section>
+
+<!-- SEÇÃO 3: TENDÊNCIAS -->
+<section class="block dark" id="tendencias">
+  <div class="section-header">
+    <div><span class="section-num">03 · Horizonte</span></div>
+    <div>
+      <h2 class="section-title">As <em>seis forças</em> que redesenham a escola até 2030.</h2>
+      <p class="section-lede">
+        Não é uma lista de modismos. São movimentos com evidência de mercado, dado comportamental de família, e alinhamento com os players que estão investindo pesado neste exato momento.
+      </p>
+    </div>
+  </div>
+
+  <div class="trend-list">
+
+    <div class="trend-item">
+      <div class="trend-num">01</div>
+      <div class="trend-body">
+        <div class="micro">Infraestrutura obrigatória</div>
+        <h3>IA como camada <em>curricular</em>, não como ferramenta extra.</h3>
+        <p>84% dos estudantes e 79% dos professores no Brasil já usam IA (Fundação Itaú, 2025). Piauí foi o primeiro território das Américas a incluir IA como disciplina obrigatória no 9º ano e no Ensino Médio. A fronteira mudou: não é "usar ChatGPT", é construir letramento crítico, ética de uso, e aplicações pedagógicas. Escolas que dominam a mediação da IA passam a ser compradas por isso.</p>
+      </div>
+      <div class="trend-tag">
+        <span class="t">Curricular</span>
+        <span class="t">Diferencial</span>
+        <span class="t">2026-2028</span>
+      </div>
+    </div>
+
+    <div class="trend-item">
+      <div class="trend-num">02</div>
+      <div class="trend-body">
+        <div class="micro">Padrão de entrada premium</div>
+        <h3>Internacionalização como <em>infraestrutura</em>, não como diferencial.</h3>
+        <p>Com SIS, Edna Roriz, Fundação Torino e outros competindo por certificações IB/Cambridge, ensino bilíngue integral, e intercâmbios estruturados, internacionalização vira commodity na faixa superior. O ponto de diferenciação migra para a qualidade da experiência internacional: partnership com escolas estrangeiras, programas de imersão curta, currículo em inglês em disciplinas específicas. O setor de intercâmbio cresceu 15% em 2024 e as famílias já planejam com 2 a 3 anos de antecedência.</p>
+      </div>
+      <div class="trend-tag">
+        <span class="t">Linha de produto</span>
+        <span class="t">Parcerias</span>
+        <span class="t">Já</span>
+      </div>
+    </div>
+
+    <div class="trend-item">
+      <div class="trend-num">03</div>
+      <div class="trend-body">
+        <div class="micro">Novo core do produto</div>
+        <h3>Socioemocionais deixam de ser <em>extra</em> e entram no centro do projeto pedagógico.</h3>
+        <p>Ansiedade, saúde mental e falta de regulação emocional são os temas que mais preocupam famílias na pesquisa de matrícula. O que antes era um projeto pontual (oficina, semana temática) passa a ser trilha estruturada, com professor-tutor, metodologia própria e acompanhamento longitudinal. Seja via parcerias com programas externos consolidados ou construção de um programa proprietário, o socioemocional vira ativo de marca. No caso da CSA, o <strong>Programa de Convivência Ética</strong> pode assumir protagonismo nessa frente, dando visibilidade externa à temática socioemocional já existente no projeto pedagógico e transformando-a em diferencial de marca reconhecível pelas famílias.</p>
+      </div>
+      <div class="trend-tag">
+        <span class="t">Programa próprio</span>
+        <span class="t">Convivência Ética</span>
+        <span class="t">Marca</span>
+      </div>
+    </div>
+
+    <div class="trend-item">
+      <div class="trend-num">04</div>
+      <div class="trend-body">
+        <div class="micro">Arquitetura de receita nova</div>
+        <h3>Contraturno vira <em>portfólio de produtos</em>, não aula extra.</h3>
+        <p>O modelo da SIS (e de escolas internacionais em geral) traz a lógica europeia: contraturno é oferta curatorial, com parceiros especialistas dentro da escola, não mais aulas avulsas de professor interno. Casa do Sol Botânico já fechou parceria com SIS para artes e música. Oportunidades claras: empreendedorismo jovem, educação financeira, robótica e IA, inglês conversacional com nativos, esportes de alta performance, lifeskills. Cada trilha é uma linha de receita.</p>
+      </div>
+      <div class="trend-tag">
+        <span class="t">Receita recorrente</span>
+        <span class="t">Parcerias B2B</span>
+      </div>
+    </div>
+
+    <div class="trend-item">
+      <div class="trend-num">05</div>
+      <div class="trend-body">
+        <div class="micro">Eficiência operacional</div>
+        <h3>Hiperpersonalização via <em>dados e learning analytics</em>.</h3>
+        <p>ERP educacional, CRM de aluno e plataformas de learning analytics deixam de ser diferencial para virar requisito de sobrevivência. A promessa vendável: "vemos cada aluno em detalhe e ajustamos a trilha ao ritmo dele". Geekie, TOTVS, plataformas proprietárias, a escolha importa menos do que o compromisso com o modelo. Família do Vale dos Cristais aceita pagar por rastreabilidade e transparência de progresso. A CSA tem o <strong>Campus</strong>, plataforma própria que está ganhando visibilidade no mercado neste momento. É uma vantagem de produto que pode ser comunicada às famílias como parte da proposta educacional, não apenas como ferramenta interna.</p>
+      </div>
+      <div class="trend-tag">
+        <span class="t">Stack tecnológico</span>
+        <span class="t">Plataforma Campus</span>
+      </div>
+    </div>
+
+    <div class="trend-item">
+      <div class="trend-num">06</div>
+      <div class="trend-body">
+        <div class="micro">Jornada ampliada</div>
+        <h3>A escola se estende para <em>antes e depois</em> do ciclo regular.</h3>
+        <p>Educação continuada após o Ensino Médio (preparatórios, cursos pós-ENEM, orientação vocacional profunda, ano sabático estruturado) é a fronteira que as redes grandes começam a ocupar. Bernoulli já tem ITA/IME dedicado. A escola deixa de entregar um produto de 12 anos para entregar uma jornada de 18+ anos. Intercâmbio de longo prazo e ano sabático têm alta de busca no Google Trends no fim de 2025.</p>
+      </div>
+      <div class="trend-tag">
+        <span class="t">Expansão de ciclo</span>
+        <span class="t">Médio prazo</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- RECOMENDAÇÕES -->
+<section class="reco-section" id="recomendacoes">
+  <div class="reco-wrap">
+    <div class="reco-header">
+      <div class="reco-kicker">04 · Provocação para a mesa</div>
+      <h2>Três horizontes de ação <em>para a CSA NL</em>,<br>em um mercado de <em>oceano azul local</em>.</h2>
+    </div>
+
+    <div class="reco-grid">
+
+      <div class="reco-col">
+        <div class="h">Curto prazo · 6 meses</div>
+        <ul>
+          <li><strong>Mapear oferta atual de contraturno</strong>Inventário do que já existe hoje, taxa de adesão, receita por linha, margem. Com 497 alunos/escola, cada +1% de adesão em contraturno é receita recorrente relevante.</li>
+          <li><strong>Entender a fuga do 9º → EM</strong>Pesquisar com alunos e famílias que saíram da CSA NL nos últimos 3 anos no ponto de transição 9º/EM: quantos foram para Sebrae, Bernoulli, Edna? Por quê? O que aquela escola oferece que a CSA não oferece?</li>
+          <li><strong>Declarar posição sobre IA na escola</strong>Antes do concorrente (letramento, política de uso, formação docente). Tendência forte em 2026 que ninguém na região reivindicou ainda.</li>
+        </ul>
+      </div>
+
+      <div class="reco-col">
+        <div class="h">Médio prazo · 2026</div>
+        <ul>
+          <li><strong>Desenhar um EM com identidade</strong>Resposta direta à Escola do Sebrae e à lógica de "aluno que quer algo diferente no EM". Itinerário próprio com empreendedorismo, projeto de vida, empresa simulada ou projeto real. Conversar com a rede Agostiniana sobre BNCC + Itinerário Formativo robusto.</li>
+          <li><strong>Lançar 2 a 3 trilhas de contraturno premium</strong>Focar nos picos do funil (Pré-escola, 7º ano, Fund II). Empreendedorismo jovem, IA e tecnologia, educação financeira. Preço entre R$ 400-800/mês. Modelo de parceria com especialistas externos (seguindo o que a SIS faz com a Casa do Sol).</li>
+          <li><strong>Ritual de continuidade 9º → EM</strong>Ativar a retenção do 9º ano com antecedência: imersão, presença dos professores do EM, mostra de projetos, visita de ex-alunos universitários. Criar razão ativa para ficar, não só inércia.</li>
+        </ul>
+      </div>
+
+      <div class="reco-col">
+        <div class="h">Longo prazo · 2027+</div>
+        <ul>
+          <li><strong>Posicionamento explícito de marca</strong>Definir claramente o que CSA NL É. Não competir em bilíngue integral contra SIS. Não competir em "escola de ENEM pura" contra Bernoulli. Não competir em "escola só de empreendedorismo" contra Sebrae. Posicionar em "formação integral agostiniana com excelência acadêmica", usando os 92 anos de história + o programa High School BYU que a CSA já tem.</li>
+          <li><strong>Diferenciação interna à rede agostiniana</strong>Estabelecer proposta clara de valor entre as unidades CSA: Nova Lima, Santo Agostinho BH, Gutierrez BH, Contagem e as duas unidades de Divinópolis (fundamental e EM recém-adquirida). Evitar sobreposição com famílias que poderiam circular entre unidades da mesma rede.</li>
+          <li><strong>Protocolo de internacionalização</strong>Ampliar o programa BYU existente com mais parcerias internacionais, imersões curtas e orientação de intercâmbio estruturada. Responde a SIS e a Edna Roriz com algo que já é próprio da CSA.</li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- APÊNDICE METODOLÓGICO -->
+<section class="method-section" id="metodologia">
+  <div class="method-wrap">
+    <div class="method-header">
+      <div class="method-kicker">05 · Apêndice · metodologia e fontes</div>
+      <h2>Como <em>este documento</em> foi construído.</h2>
+      <p class="method-intro">
+        Toda afirmação aqui dentro foi ancorada em fonte pública ou pesquisa de mercado. Este apêndice lista as origens, as limitações, e os próximos passos metodológicos que podem aprofundar cada seção.
+      </p>
+    </div>
+
+    <div class="method-grid">
+
+      <div class="method-col">
+        <div class="mh">Fontes de dados</div>
+        <ul class="method-list">
+          <li><strong>Neoway (Receita Federal, 2022)</strong>Mapeamento de CNAE 85.12-1-00 e 85.13-9-00 para MG, Belo Horizonte e Nova Lima. Faturamento, funcionários e número de escolas privadas ativas.</li>
+          <li><strong>IBGE Cidades · Censo Escolar</strong>Matrículas por série em escolas privadas (Ed. Infantil ao Fundamental II). Nova Lima e Belo Horizonte.</li>
+          <li><strong>POF/IBGE · Análise iDados</strong>Gasto familiar com educação por faixa de renda. Base: Pesquisa de Orçamentos Familiares.</li>
+          <li><strong>Belta · Pesquisa Selo 2024</strong>Mercado brasileiro de intercâmbio. Crescimento ano fechado 2024 (+15%, R$ 540 mi).</li>
+          <li><strong>ABEBI</strong>Associação Brasileira de Ensino Bilíngue. Dados do segmento (1.200+ escolas, crescimento +10% em 5 anos).</li>
+          <li><strong>Reportagens de mercado</strong>Diário do Comércio, BHAZ, Hoje em Dia, Estado de Minas, SouBH, Jornal Belvedere para dados de SIS, mensalidades e aberturas.</li>
+          <li><strong>Consultas diretas</strong>Cultura Inglesa, CNA, Wizard, CCAA, Fisk, Happy Code, SuperGeeks para faixas de preço de contraturno.</li>
+        </ul>
+      </div>
+
+      <div class="method-col">
+        <div class="mh">Limitações conhecidas</div>
+        <ul class="method-list">
+          <li><strong>Dados Neoway são de 2022</strong>Mercado cresceu desde então. Valores absolutos podem subestimar a realidade atual em ~15-20%, mas a relação estrutural entre NL e BH permanece válida.</li>
+          <li><strong>IBGE 2022 sem Ensino Médio</strong>O levantamento original não disponibilizou matrículas privadas no EM. Etapa decisiva para o funil de contraturno, recomendamos captura via INEP.</li>
+          <li><strong>Coordenadas de contraturno aproximadas</strong>Pontos de cursos de inglês, robótica etc. foram plotados por bairro. Não validados por endereço exato.</li>
+          <li><strong>Mensalidades competidoras</strong>Valores públicos de 2024-2025, pode haver defasagem. SIS e Edna Roriz são estimativas de reportagens, não dados confirmados pela própria instituição.</li>
+          <li><strong>Estimativa de receita de contraturno CSA</strong>Cálculo ilustrativo baseado em total de alunos privados médios da região, não em dados operacionais reais da escola.</li>
+        </ul>
+      </div>
+
+      <div class="method-col">
+        <div class="mh">O que aprofundar</div>
+        <ul class="method-list">
+          <li><strong>Cliente oculto nos concorrentes</strong>Material didático, mensalidades reais, grade curricular, sistema de avaliação, formas de monetização, diferenciais de cada competidor do quadrante.</li>
+          <li><strong>Pesquisa qualitativa com famílias</strong>O que a família CSA NL paga hoje fora da escola? Em quais categorias? Qual seria a disposição de pagar dentro da escola?</li>
+          <li><strong>Análise digital dos concorrentes</strong>Seguidores, engajamento, principais publicações, canais de atendimento, avaliações Google/Facebook/Reclame Aqui, tráfego pago dos 4 principais.</li>
+          <li><strong>Dados INEP/Censo Escolar 2024</strong>Matrículas por escola, taxa de aprovação, resultado ENEM por instituição, corpo docente por formação.</li>
+          <li><strong>Benchmark de receita por linha de contraturno</strong>Com escolas de rede Agostiniana em outras cidades ou outros privados premium, margem real dessas trilhas.</li>
+        </ul>
+      </div>
+
+    </div>
+
+    <div class="method-footer">
+      <div class="mf-item">
+        <div class="mf-k">Período de coleta</div>
+        <div class="mf-v">Dados de mercado entre 2022 e 2026</div>
+      </div>
+      <div class="mf-item">
+        <div class="mf-k">Última atualização</div>
+        <div class="mf-v">Abril 2026</div>
+      </div>
+      <div class="mf-item">
+        <div class="mf-k">Próxima revisão sugerida</div>
+        <div class="mf-v">Após pesquisa qualitativa com famílias + dados INEP 2024</div>
+      </div>
+      <div class="mf-item">
+        <div class="mf-k">Versão</div>
+        <div class="mf-v">v.02 · equilibrado</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="foot">
+    <span>Documento interno · CSA Rede Lius Agostinianos</span>
+    <span class="sig">Abril 2026</span>
+    <span>v.07</span>
+  </div>
+</footer>
+
+<script>
+// COORDENADA DA CSA NOVA LIMA (centro do radar)
+const CSA_NL = [-19.990745, -43.967555];
+
+// DADOS DE ESCOLAS E CONTRATURNO
+const points = [
+  // ESCOLAS
+  {
+    id: 'csa', type: 'school', name: 'CSA Nova Lima (aqui)',
+    loc: 'Vale dos Cristais, Nova Lima',
+    lat: -19.990745, lng: -43.967555,
+    threat: 'self',
+    desc: '1º lugar ENEM Nova Lima em 2025. Ed. Infantil ao Ensino Médio. Rede CSA com 6 unidades: Nova Lima, Santo Agostinho BH, Gutierrez BH, Contagem, e duas em Divinópolis (Fundamental + EM recém-adquirido).',
+    tags: ['Base própria', 'Referência local']
+  },
+  {
+    id: 'sis', type: 'school', name: 'SIS Swiss International (2027)',
+    loc: 'Belvedere, Av. Celso Porfírio Machado, 1481',
+    lat: -19.963900, lng: -43.942800,
+    threat: 'high',
+    desc: 'Rede suíça, integral bilíngue, IB Diploma. Abre janeiro/2027 com 450 alunos. Mensalidade R$ 5 a 6,7k.',
+    tags: ['Entrante 2027', 'Alta ameaça', 'Internacional']
+  },
+  {
+    id: 'torino', type: 'school', name: 'Fundação Torino',
+    loc: 'Piemonte, Nova Lima (fronteira Belvedere)',
+    lat: -19.975800, lng: -43.950200,
+    threat: 'med',
+    desc: 'Escola italiana desde 1973. Referência em Nova Lima, corpo docente qualificado, perfil de nicho italiano.',
+    tags: ['Internacional', 'Tradição']
+  },
+  {
+    id: 'edna', type: 'school', name: 'Colégio Edna Roriz',
+    loc: 'Belvedere, BH',
+    lat: -19.966300, lng: -43.938100,
+    threat: 'med',
+    desc: 'Referência internacional em BH há 26 anos. Multicultural, atendimento individualizado. Captura nicho específico, não compete em escala. Mensalidade ~R$ 5k.',
+    tags: ['Internacional', 'Nicho']
+  },
+  {
+    id: 'bernoulli-vs', type: 'school', name: 'Bernoulli Vale do Sereno',
+    loc: 'Nova Lima · Av. Bom Jesus do Vale',
+    lat: -19.967800, lng: -43.952400,
+    threat: 'high',
+    desc: 'Vizinho direto. Abriu em fev/2025. Mais cara de BH/NL: R$ 5.778 na 3ª série do EM. 40 mil m², capacidade 2.800 alunos. Tem tirado alunos do Vale dos Cristais.',
+    tags: ['Vizinho direto', 'Novíssimo', 'Premium']
+  },
+  {
+    id: 'bernoulli-cj', type: 'school', name: 'Bernoulli Cidade Jardim',
+    loc: 'Prudente de Morais · ex-Pitágoras',
+    lat: -19.944300, lng: -43.941500,
+    threat: 'high',
+    desc: 'Nova sede no casarão tombado onde funcionava o Pitágoras (fechou em 2021). Substitui a unidade Santo Agostinho que foi desativada. Ensino Fund II ao EM.',
+    tags: ['ENEM', 'Nova sede']
+  },
+  {
+    id: 'bernoulli-lourdes', type: 'school', name: 'Bernoulli Lourdes',
+    loc: 'Lourdes, BH',
+    lat: -19.931300, lng: -43.947100,
+    threat: 'med',
+    desc: '2ª e 3ª séries do EM + pré-vestibular extensivo, intensivo, ITA/IME. Referência nacional em vestibulares de elite.',
+    tags: ['Vestibular', 'ITA/IME']
+  },
+  {
+    id: 'smm', type: 'school', name: 'Santa Maria Minas Nova Lima',
+    loc: 'Centro de NL · Av. Rio Branco, 333',
+    lat: -19.984300, lng: -43.847700,
+    threat: 'high',
+    desc: 'Tradicional escola católica (rede PUC/Arquidiocese), fundada em 1903. 13 unidades em BH/RMBH. Captura alunos CSA especialmente no Fundamental I por proximidade no centro da cidade, tradição católica e preço mais acessível.',
+    tags: ['Fundamental I', 'Católico', 'Tradição']
+  },
+  {
+    id: 'steiner', type: 'school', name: 'Colégio Rudolf Steiner',
+    loc: 'Jardinaves, Nova Lima',
+    lat: -19.979200, lng: -43.891100,
+    threat: 'low',
+    desc: 'Pedagogia Waldorf. Nicho diferenciado, não compete no mesmo público.',
+    tags: ['Nicho', 'Waldorf']
+  },
+  {
+    id: 'logosofico', type: 'school', name: 'Instituto Logosófico',
+    loc: 'Região Centro-Sul BH',
+    lat: -19.949000, lng: -43.925000,
+    threat: 'med',
+    desc: 'Pedagogia logosófica, filosofia própria. Base forte na região.',
+    tags: ['Filosofia', 'Tradição']
+  },
+  {
+    id: 'loyola', type: 'school', name: 'Colégio Loyola',
+    loc: 'Lourdes, BH',
+    lat: -19.935700, lng: -43.947800,
+    threat: 'med',
+    desc: 'Tradicional colégio jesuíta. Formação integral e forte tradição acadêmica. Mais próximo de NL entre as grandes tradicionais de BH.',
+    tags: ['Tradição', 'Jesuíta']
+  },
+  {
+    id: 'marista-ds', type: 'school', name: 'Marista Dom Silvério',
+    loc: 'Padre Eustáquio, BH',
+    lat: -19.909200, lng: -43.971500,
+    threat: 'med',
+    desc: 'Rede Marista (200+ anos no Brasil). Bilíngue, NAC, internacionalização, preparação para medicina.',
+    tags: ['Marista', 'Tradição']
+  },
+  {
+    id: 'magnum', type: 'school', name: 'Colégio Magnum',
+    loc: 'Cidade Nova, BH',
+    lat: -19.949400, lng: -43.984700,
+    threat: 'low',
+    desc: 'Tradição em BH. Forte em vestibulares. Já teve origem agostiniana no passado, hoje não integra a rede.',
+    tags: ['Tradição', 'ENEM']
+  },
+  // CONTRATURNO: INGLÊS
+  {
+    id: 'cultura-belvedere', type: 'contra', category: 'ingles',
+    name: 'Cultura Inglesa Belvedere',
+    loc: 'Belvedere Shopping',
+    lat: -19.969500, lng: -43.935200,
+    desc: 'Premium. Mensalidade ~R$ 500. Certificações Cambridge.',
+    tags: ['Inglês', 'Premium']
+  },
+  {
+    id: 'cna-belvedere', type: 'contra', category: 'ingles',
+    name: 'CNA Belvedere',
+    loc: 'Av. Luiz Paulo Franco',
+    lat: -19.966000, lng: -43.940100,
+    desc: 'Premium. R$ 400-550/mês. Forte em teen e adulto.',
+    tags: ['Inglês']
+  },
+  {
+    id: 'wizard-belvedere', type: 'contra', category: 'ingles',
+    name: 'Wizard Belvedere',
+    loc: 'Belvedere',
+    lat: -19.965700, lng: -43.946300,
+    desc: 'R$ 300-500/mês. Método Pearson.',
+    tags: ['Inglês']
+  },
+  {
+    id: 'openenglish-nl', type: 'contra', category: 'ingles',
+    name: 'English Schools Nova Lima',
+    loc: 'Vila da Serra, Nova Lima',
+    lat: -19.978600, lng: -43.955400,
+    desc: 'Várias escolas de inglês na Vila da Serra. Faixa R$ 350-600.',
+    tags: ['Inglês']
+  },
+  // CONTRATURNO: TECNOLOGIA / ROBÓTICA
+  {
+    id: 'supergeeks', type: 'contra', category: 'tec',
+    name: 'SuperGeeks Belvedere',
+    loc: 'Belvedere',
+    lat: -19.964800, lng: -43.943500,
+    desc: 'Programação e robótica para crianças/adolescentes. R$ 550-900.',
+    tags: ['Robótica', 'Programação']
+  },
+  {
+    id: 'happycode', type: 'contra', category: 'tec',
+    name: 'Happy Code BH',
+    loc: 'Lourdes / Savassi',
+    lat: -19.940200, lng: -43.932500,
+    desc: 'Rede de tecnologia e inovação para jovens. R$ 500-850.',
+    tags: ['Tech', 'Empreendedorismo']
+  },
+  {
+    id: 'cieentem', type: 'contra', category: 'tec',
+    name: 'CIEE Tem / Cursos Tech',
+    loc: 'Vila da Serra',
+    lat: -19.980200, lng: -43.958700,
+    desc: 'Cursos emergentes de IA e tech para adolescentes. Faixa R$ 450-700.',
+    tags: ['IA', 'Tech']
+  },
+  // CONTRATURNO: EMPREENDEDORISMO / EDUCAÇÃO FINANCEIRA
+  {
+    id: 'jovensgenios', type: 'contra', category: 'emp',
+    name: 'Jovens Gênios',
+    loc: 'BH / online + presencial',
+    lat: -19.935500, lng: -43.928500,
+    desc: 'Empreendedorismo e educação financeira para adolescentes. R$ 400-600.',
+    tags: ['Empreendedorismo', 'Finanças']
+  },
+  {
+    id: 'sebrae', type: 'school', name: 'Escola do Sebrae',
+    loc: 'Nova Granada, BH · R. Maria Macedo, 998',
+    lat: -19.944700, lng: -43.974300,
+    threat: 'high',
+    desc: 'Apenas Ensino Médio integrado ao Técnico (Administração ou Marketing). 30 anos, metodologia austríaca, empresa simulada, missões internacionais. 266 vagas em 2026, mais de 5 candidatos por vaga. Captura alunos no ponto de virada 9º ano → EM.',
+    tags: ['Ensino Médio', 'Empreendedorismo', 'Seletiva']
+  },
+  // CONTRATURNO: INTERCÂMBIO / AGÊNCIAS
+  {
+    id: 'ci-belvedere', type: 'contra', category: 'int',
+    name: 'CI Intercâmbio BH',
+    loc: 'Lourdes',
+    lat: -19.937400, lng: -43.935100,
+    desc: 'Uma das principais agências do país. High School, verão, universidade. R$ 15-45k/programa.',
+    tags: ['Intercâmbio']
+  },
+  {
+    id: 'stb', type: 'contra', category: 'int',
+    name: 'STB Intercâmbio',
+    loc: 'Savassi, BH',
+    lat: -19.939300, lng: -43.934100,
+    desc: 'High School EUA/Canadá, programas curtos, universidade.',
+    tags: ['Intercâmbio']
+  },
+  {
+    id: 'ef', type: 'contra', category: 'int',
+    name: 'EF Education First',
+    loc: 'BH · atendimento em agência',
+    lat: -19.930900, lng: -43.938500,
+    desc: 'Rede global com forte atuação em intercâmbio longo. Destinos: Inglaterra, EUA, Malta, entre outros.',
+    tags: ['Intercâmbio']
+  },
+  // CONTRATURNO: MÚSICA / ARTES
+  {
+    id: 'casadosol', type: 'contra', category: 'art',
+    name: 'Casa do Sol · Estúdio Criativo',
+    loc: 'Belvedere · Botânico Shopping',
+    lat: -19.968200, lng: -43.944100,
+    desc: 'Artes e música. Já fechou parceria com a SIS para contraturno dentro da escola.',
+    tags: ['Artes', 'Música', 'Parceiro SIS']
+  },
+  // CONTRATURNO: ESPORTES
+  {
+    id: 'bhtc', type: 'contra', category: 'esp',
+    name: 'BH Tênis Clube / Academias Vila da Serra',
+    loc: 'Vila da Serra',
+    lat: -19.981300, lng: -43.960500,
+    desc: 'Tênis, natação, ginástica de alto nível. R$ 400-700.',
+    tags: ['Esportes']
+  }
+];
+
+// MAPA - com proteção caso Leaflet não tenha carregado
+if (typeof L === 'undefined') {
+  const mapEl = document.getElementById('map');
+  if (mapEl) {
+    mapEl.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100%;padding:40px;text-align:center;font-family:\'Fraunces\',serif;color:#e8e2d4;font-size:16px;background:#0f100e">A biblioteca de mapas não pôde ser carregada neste ambiente. O conteúdo do mapa está listado no painel lateral ao lado.</div>';
+  }
+} else {
+
+const map = L.map('map', {
+  center: [-19.975, -43.945],
+  zoom: 12,
+  scrollWheelZoom: false,
+  zoomControl: true
+});
+
+// Tile layer: OpenStreetMap como primeira opção (mais confiável), CARTO dark como visual alternativo
+const tileOSM = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  attribution: '© OpenStreetMap contributors',
+  maxZoom: 19,
+  subdomains: 'abc'
+});
+
+const tileDark = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png', {
+  attribution: '© OpenStreetMap · CARTO',
+  maxZoom: 19,
+  subdomains: 'abcd'
+});
+
+// Tenta CARTO dark; se falhar, usa OSM
+tileDark.on('tileerror', function() {
+  if (!map.hasLayer(tileOSM)) {
+    map.removeLayer(tileDark);
+    tileOSM.addTo(map);
+  }
+});
+
+tileDark.addTo(map);
+
+// RADAR: CÍRCULOS DE RAIO A PARTIR DA CSA
+const radius2km = L.circle(CSA_NL, {
+  radius: 2000,
+  color: '#6b1f24',
+  weight: 2,
+  fillColor: '#6b1f24',
+  fillOpacity: 0.06,
+  dashArray: '4, 6'
+}).addTo(map);
+
+const radius5km = L.circle(CSA_NL, {
+  radius: 5000,
+  color: '#a87f4a',
+  weight: 1.5,
+  fillColor: '#a87f4a',
+  fillOpacity: 0.03,
+  dashArray: '3, 6'
+}).addTo(map);
+
+const radius10km = L.circle(CSA_NL, {
+  radius: 10000,
+  color: '#3d4a2a',
+  weight: 1,
+  fillColor: '#3d4a2a',
+  fillOpacity: 0.02,
+  dashArray: '2, 6',
+  opacity: 0.6
+}).addTo(map);
+
+// Adicionar um "ping" central no CSA
+const csaPulse = L.circle(CSA_NL, {
+  radius: 120,
+  color: '#d4a574',
+  weight: 2,
+  fillColor: '#d4a574',
+  fillOpacity: 0.5
+}).addTo(map);
+
+// MARCADORES
+const markers = {};
+
+function createMarker(p) {
+  let color = '#7a7466';
+  let size = 14;
+  let shape = 'circle';
+  let border = 'white';
+
+  if (p.type === 'school') {
+    if (p.threat === 'self') { color = '#d4a574'; size = 22; }
+    else if (p.threat === 'high') { color = '#6b1f24'; size = 17; }
+    else if (p.threat === 'med') { color = '#a87f4a'; size = 14; }
+    else if (p.threat === 'low') { color = '#3d4a2a'; size = 13; }
+  } else {
+    // contraturno usa ícones coloridos por categoria
+    const catColors = {
+      'ingles': '#4a7c7e',
+      'tec': '#7a6c9a',
+      'emp': '#c2964a',
+      'int': '#b05a5a',
+      'art': '#9a6c7a',
+      'esp': '#6c9a7a'
+    };
+    color = catColors[p.category] || '#7a7466';
+    size = 10;
+  }
+
+  const isSIS = p.id === 'sis';
+  const shapeCSS = p.type === 'school'
+    ? 'border-radius: 50%'
+    : 'border-radius: 2px; transform: rotate(45deg)';
+
+  const markerIcon = L.divIcon({
+    className: '',
+    html: isSIS
+      ? `<div class="sis-pulse" style="width:${size}px;height:${size}px;"></div>`
+      : `<div style="width:${size}px;height:${size}px;background:${color};border:2px solid ${border};box-shadow:0 2px 6px rgba(0,0,0,0.5);${shapeCSS}"></div>`,
+    iconSize: [size, size],
+    iconAnchor: [size/2, size/2]
+  });
+
+  const m = L.marker([p.lat, p.lng], { icon: markerIcon });
+
+  const catLabel = {
+    'ingles': 'Inglês',
+    'tec': 'Tecnologia',
+    'emp': 'Empreendedorismo',
+    'int': 'Intercâmbio',
+    'art': 'Artes/Música',
+    'esp': 'Esportes'
+  }[p.category] || '';
+
+  m.bindPopup(`
+    <div style="font-family:'Fraunces',serif;min-width:180px">
+      <div style="font-weight:600;font-size:15px;margin-bottom:4px;">${p.name}</div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:9px;text-transform:uppercase;letter-spacing:0.1em;color:#7a7466;margin-bottom:6px;">${p.loc}</div>
+      ${catLabel ? `<div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:${color};margin-bottom:6px;">◆ ${catLabel}</div>` : ''}
+      <div style="font-size:12px;line-height:1.5;">${p.desc}</div>
+    </div>
+  `);
+
+  return m;
+}
+
+points.forEach(p => {
+  markers[p.id] = createMarker(p).addTo(map);
+});
+
+// FILTROS
+const btns = document.querySelectorAll('.mc-btn');
+btns.forEach(btn => {
+  btn.addEventListener('click', () => {
+    btns.forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const filter = btn.dataset.filter;
+
+    points.forEach(p => {
+      const m = markers[p.id];
+      if (!m) return;
+      const show =
+        filter === 'all' ||
+        (filter === 'schools' && p.type === 'school') ||
+        (filter === 'contra' && (p.type === 'contra' || p.id === 'csa'));
+      if (show) {
+        if (!map.hasLayer(m)) m.addTo(map);
+      } else {
+        if (map.hasLayer(m)) map.removeLayer(m);
+      }
+    });
+
+    // Re-render painel
+    renderPanel(filter);
+  });
+});
+
+// PAINEL LATERAL
+const panel = document.getElementById('comp-panel');
+
+function renderPanel(filter = 'all') {
+  panel.innerHTML = '';
+  const categoryLabels = {
+    'ingles': '🌍 Inglês',
+    'tec': '💻 Tecnologia / Robótica',
+    'emp': '📊 Empreendedorismo / Finanças',
+    'int': '✈️ Intercâmbio',
+    'art': '🎨 Artes / Música',
+    'esp': '⚽ Esportes'
+  };
+
+  const order = ['csa', 'bernoulli-vs', 'sis', 'edna', 'sebrae', 'bernoulli-cj', 'bernoulli-lourdes', 'torino', 'loyola', 'marista-ds', 'smm', 'logosofico', 'magnum', 'steiner'];
+  const schools = order.map(id => points.find(p => p.id === id)).filter(Boolean);
+
+  if (filter === 'all' || filter === 'schools') {
+    const hdr = document.createElement('div');
+    hdr.className = 'panel-hdr';
+    hdr.textContent = 'Escolas na região';
+    panel.appendChild(hdr);
+
+    schools.forEach(c => renderCard(c));
+  }
+
+  if (filter === 'all' || filter === 'contra') {
+    const cats = ['ingles', 'tec', 'emp', 'int', 'art', 'esp'];
+    cats.forEach(cat => {
+      const catPoints = points.filter(p => p.type === 'contra' && p.category === cat);
+      if (catPoints.length === 0) return;
+      const hdr = document.createElement('div');
+      hdr.className = 'panel-hdr';
+      hdr.textContent = categoryLabels[cat];
+      panel.appendChild(hdr);
+      catPoints.forEach(c => renderCard(c));
+    });
+  }
+}
+
+function renderCard(c) {
+  let threatClass = '';
+  let threatLabel = '';
+  if (c.type === 'school') {
+    threatClass = c.threat === 'self' ? '' : `threat-${c.threat}`;
+    threatLabel = {
+      'self': 'Base',
+      'high': 'Alta ameaça',
+      'med': 'Média',
+      'low': 'Baixa'
+    }[c.threat];
+  } else {
+    threatClass = 'threat-contra';
+  }
+  const card = document.createElement('div');
+  card.className = `comp-card ${threatClass}`;
+  card.innerHTML = `
+    <h4>${c.name}</h4>
+    <div class="loc">${c.loc}</div>
+    <div class="desc">${c.desc}</div>
+    <div>
+      ${c.type === 'school' ? (c.threat !== 'self'
+        ? `<span class="tag threat">${threatLabel}</span>`
+        : `<span class="tag" style="background:var(--accent);color:var(--ink)">Nosso ponto</span>`) : ''}
+      ${c.tags.slice(0, 2).map(t => `<span class="tag">${t}</span>`).join('')}
+    </div>
+  `;
+  card.addEventListener('click', () => {
+    map.flyTo([c.lat, c.lng], 14, { duration: 0.8 });
+    markers[c.id].openPopup();
+  });
+  panel.appendChild(card);
+}
+
+renderPanel('all');
+
+} // fim do else (Leaflet carregou com sucesso)
+
+// BARRAS ANIMADAS (independe do mapa)
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const bars = entry.target.querySelectorAll('.bar-fill');
+      bars.forEach((bar, i) => {
+        setTimeout(() => {
+          bar.style.width = bar.dataset.w + '%';
+        }, i * 120);
+      });
+      observer.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.3 });
+
+document.querySelectorAll('.market-card.span-12').forEach(c => observer.observe(c));
+
+</script>
+
+</body>
+</html>
